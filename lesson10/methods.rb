@@ -10,25 +10,36 @@ def get_letters
     slovo = STDIN.gets.encode('UTF-8').chomp
   end
   cls
-  slovo.split('')
+  slovo.downcase.split('')
 
 end
 
-def get_user_input
+def get_user_input(good_letters, bad_letters)
   letter = ''
-  while letter == '' do
-    letter = STDIN.gets.encode("UTF-8").chomp
+
+  while letter == ''  do
+    puts "Tastati litera >> "
+
+    letter = STDIN.gets.encode("UTF-8").chomp.downcase
+
+    if good_letters.include?(letter)
+      puts "'#{letter}' este ghicita"
+      letter = ''
+    elsif bad_letters.include? letter
+      puts "'#{letter}' este eroare"
+      letter = ''
+    end
   end
   letter
 end
 
 def check_result(user_input, letters, good_letters, bad_letters)
-  0 if (good_letters.include?(user_input) ||
-      bad_letters.include?(user_input))
+  0 if (good_letters.include?(user_input) || bad_letters.include?(user_input))
+
   if letters.include? user_input
     good_letters << user_input
     # cand e ghicit cuvantul
-    if letters.uniq.size == good_letters.size
+    if letters.uniq.size == good_letters.uniq.size
       return 1
     else
       return 0
@@ -44,16 +55,17 @@ end
 # 2. informatia despre errori
 # 3. errori > 7 perdere
 # 4. cuvantul ghicit
+
 def get_word_for_print(letters, good_letters)
   result = ''
-  for letter in letters do
+  letters.each { |letter|
     if good_letters.include? letter
       result += letter + ' '
     else
       result += '* '
     end
-  end
-  return result
+  }
+  result
 end
 
 def print_status(letters, good_letters, bad_letters, errors)
@@ -62,8 +74,10 @@ def print_status(letters, good_letters, bad_letters, errors)
   if errors >= 7
     puts "Ati pierdut :("
   else
-    if letters.uniq.size == good_letters.size
-      puts "Ati castigat !!!"
+    if letters.uniq.size == good_letters.uniq.size
+      puts
+      puts ("Ati castigat !!!".center(30))
+      puts
     else
       puts "Ti-au mai ramasa < #{(7-errors).to_s} > incercari"
     end
