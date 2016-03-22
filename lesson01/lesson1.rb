@@ -1,4 +1,6 @@
 #!
 
-puts "hi"
+puts ("hi".center(50))
+
+
 
